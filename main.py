@@ -7,7 +7,7 @@ AWS_SECRET_ACCESS_KEY = "0nVHzAEWQDBv6Q+sZoOLFj2I101dcfdXk9P1jayT"
 BUCKET_NAME = 'danonephotobooth'
 DYNAMODB_TABLE_NAME = 'Danone'
 
-app = Flask(__name__, template_folder='/Users/ahmedbahri/Desktop/Danone')
+app = Flask(__name__, template_folder='/home/ec2-user/Danone')
 
 # establish the client connection to the the S3 service of AWS
 s3 = boto3.client(
