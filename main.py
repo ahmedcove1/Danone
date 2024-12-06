@@ -4,7 +4,7 @@ import boto3
 # define the needed credentials and bucket name
 AWS_ACCESS_KEY_ID = "AKIAT222LRWOLK7L5N5T"
 AWS_SECRET_ACCESS_KEY = "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"
-BUCKET_NAME = 'danonephotobooth'
+BUCKET_NAME = 'lutindanone'
 DYNAMODB_TABLE_NAME = 'Danone'
 
 app = Flask(__name__, template_folder='/home/ec2-user/Danone')
@@ -12,7 +12,7 @@ app = Flask(__name__, template_folder='/home/ec2-user/Danone')
 # establish the client connection to the the S3 service of AWS
 s3 = boto3.client(
     service_name="s3",
-    region_name="eu-west-3",
+    region_name="us-east-1",
     aws_access_key_id=AWS_ACCESS_KEY_ID,
     aws_secret_access_key=AWS_SECRET_ACCESS_KEY
 )
@@ -48,11 +48,23 @@ def form(id):
             }
         )
         
-        # Vérification de l'existence du fichier dans S3
         try:
             s3.head_object(Bucket=BUCKET_NAME, Key=f'{id}.jpg')
             image_url = s3.generate_presigned_url('get_object', Params={'Bucket': BUCKET_NAME, 'Key': f'{id}.jpg'}, ExpiresIn=3600)
-        except s3.exceptions.ClientError:
+            print(image_url)
+        except s3.exceptions.ClientError as e:
+            error_code = e.response['Error']['Code']
+            print(e)
+            if error_code == '403':
+                print(f"Access denied for object {id}.jpg in bucket {BUCKET_NAME}. Check your permissions.")
+            elif error_code == '404':
+                print(f"Object {id}.jpg not found in bucket {BUCKET_NAME}.")
+            elif error_code == 'AccessDenied':
+                print(f"Explicit deny for object {id}.jpg in bucket {BUCKET_NAME}. Check your IAM policies.")
+            elif error_code == '500':
+                print(f"Server error for object {id}.jpg in bucket {BUCKET_NAME}. Please try again later.")
+            else:
+                print(f"Error occurred: {e}")
             image_url = None
         
         return render_template('result.html', nom=nom, prenom=prenom, role=role, email=email, image_url=image_url)
