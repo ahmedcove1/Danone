@@ -1,5 +1,6 @@
 from flask import Flask, request, render_template, redirect, url_for
 import boto3
+import os
 
 # define the needed credentials and bucket name
 AWS_ACCESS_KEY_ID = "AKIAT222LRWOLK7L5N5T"
@@ -7,8 +8,8 @@ AWS_SECRET_ACCESS_KEY = "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"
 BUCKET_NAME = 'lutindanone'
 DYNAMODB_TABLE_NAME = 'Danone'
 
-app = Flask(__name__, template_folder='/home/ec2-user/Danone')
-
+#app = Flask(__name__, template_folder='/home/ec2-user/Danone')
+app = Flask(__name__, template_folder='/Users/ahmedbahri/Desktop/Danone')
 # establish the client connection to the the S3 service of AWS
 s3 = boto3.client(
     service_name="s3",
@@ -75,5 +76,11 @@ def form(id):
     
     return render_template('form.html', id=id)
 
+@app.route('/health')
+def health_check():
+    return "OK", 200
+
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5001)
+    host = os.getenv('HOST', '0.0.0.0')
+    port = int(os.getenv('PORT', 5001))
+    app.run(debug=True, host=host, port=port)
