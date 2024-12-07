@@ -26,6 +26,10 @@ dynamodb = boto3.resource(
 )
 table = dynamodb.Table(DYNAMODB_TABLE_NAME)
 
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory('static', 'favicon.ico', mimetype='image/vnd.microsoft.icon')
+    
 @app.route('/<id>', methods=['GET', 'POST'])
 def form(id):
     if request.method == 'POST':
