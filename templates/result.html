@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Résultat</title>
+    <link href="https://fonts.cdnfonts.com/css/christmas-classica" rel="stylesheet">
+    <style>
+        @import url('https://fonts.cdnfonts.com/css/christmas-classica');
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e9ecef;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 100%;
+            max-width: 600px;
+            font-family: 'Christmas   Classica', sans-serif;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        p {
+            font-size: 18px;
+            color: red;
+        }
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            .container {
+                padding: 20px;
+            }
+            p {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <p> 🎄  Joyeux Noël  {{ prenom }} {{ nom }}🎄 </p>
+        {% if image_url %}
+            <img src="{{ image_url }}" alt="Image de {{ nom }}">
+        {% else %}
+            <p>Aucune image disponible</p>
+        {% endif %}
+    </div>
+</body>
+</html>
